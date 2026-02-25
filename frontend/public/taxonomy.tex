@@ -1,0 +1,207 @@
+\documentclass[a4paper]{article}
+
+\usepackage[sort&compress,numbers,square]{natbib}
+\usepackage{graphicx} 
+\usepackage{array} 
+\usepackage{caption} 
+\usepackage{geometry} 
+\geometry{margin=1in}
+
+\usepackage[table,xcdraw]{xcolor} % For background colors
+\usepackage{colortbl} % For row and column coloring
+\definecolor{lightblue}{rgb}{0.92, 0.97, 1} % Lighter blue color
+
+\begin{document}
+
+
+\begin{table}[htbp]
+    \centering
+    \caption{Identification}
+    \label{tab:taxonomy_identification}
+    \renewcommand{\arraystretch}{1.3} 
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|>{\columncolor{lightblue}}p{3cm}|p{2.5cm}|p{2cm}|p{2.5cm}|p{2cm}|p{3cm}|p{3cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{3cm}|}
+        \hline
+        
+        \textbf{Identification} & \textbf{Nature} & \textbf{Type} & \textbf{Stage} & \textbf{Temporal} & \textbf{Occurrence} & \textbf{SourceAdaptation} & \textbf{Scope} & \textbf{Risk} & \textbf{Affect} & \textbf{Propagation} & \textbf{Data} & \textbf{Ethical} \\ \hline
+        
+        \textbf{Hardware specifications} & Static, Deterministic & Epistemic & Design & Long-term & Hardware & Internal & Local, Component & Low & Safety, Reliability & Isolated & Precise & Transparency \\ \hline  
+        
+        \textbf{Assembling hardware parts} & Static, Deterministic & Epistemic & Development & Short-term & Hardware, Environmental & Internal & Local, Component & Moderate & Performance, Safety & Cascading & Ambiguous & Bias \\ \hline  
+        
+        \textbf{Operations/ field testing} & Dynamic, Stochastic & Aleatoric & Operational & Short-term & Environmental, Software & External & Global, System & High & Safety, Reliability & Cascading & Noisy & Fairness \\ \hline  
+        
+        \textbf{Analyzing deviations from expected behavior} & Dynamic, Stochastic & Epistemic & Testing & Long-term & Software & Internal & Global, System & High & Adaptability, Performance & Cascading & Incomplete & Trust \\ \hline  
+        
+        \textbf{Formal modeling with nondeterminism} & Static, Deterministic & Epistemic & Design & Long-term & Software, Environmental & Internal & Global, System & High & Performance, Adaptability & Isolated & Precise & Transparency \\ \hline  
+        
+        \textbf{Intuition} & Dynamic, Stochastic & Other & Design & Short-term & Environmental & Internal & Local, Component & Moderate & Safety, Reliability & Isolated & Ambiguous & Bias \\ \hline  
+        
+        \textbf{Proof of concept demonstration} & Static, Deterministic & Aleatoric & Testing & Short-term & Hardware, Environmental & External & Local, Component & Low & Performance, Safety & Isolated & Precise & Fairness \\ \hline  
+        
+        \textbf{Component variations} & Static, Deterministic & Aleatoric & Operational & Short-term & Hardware & External & Local, Component & Moderate & Reliability, Safety & Cascading & Noisy & Transparency \\ \hline  
+        
+        \textbf{Sensor data analysis} & Dynamic, Stochastic & Epistemic & Development & Short-term & Environmental, Hardware & Internal & Local, Component & High & Reliability, Safety & Cascading & Noisy & Trust \\ \hline  
+        
+    \end{tabular}%
+    }
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Sources}
+    \label{tab:taxonomy_sources}
+    \renewcommand{\arraystretch}{1.3} 
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|>{\columncolor{lightblue}}p{2.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2.5cm}|p{2cm}|p{1.5cm}|p{2cm}|p{2.5cm}|p{2cm}|p{2cm}|}
+        \hline
+        
+        \textbf{Source} & \textbf{Nature} & \textbf{Type} & \textbf{Stage} & \textbf{Temporal} & \textbf{Occurrence} & \textbf{SourceAdaptation} & \textbf{Scope} & \textbf{Risk} & \textbf{Affect} & \textbf{Propagation} & \textbf{Data} & \textbf{Ethical} \\ \hline 
+        
+        \textbf{Human Interaction Errors} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & External & Local, Component & High & Safety, Reliability & Cascading & Noisy & Transparency \\ \hline          
+        
+        \textbf{Sensor Noise} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & External & Local, Component & Moderate & Reliability, Safety & Isolated & Noisy & Fairness \\ \hline          
+        
+        \textbf{Actuator Noise} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & External & Local, Component & Moderate & Performance, Safety & Isolated & Noisy & Fairness \\ \hline          
+        
+        \textbf{Environment} & Dynamic, Stochastic & Aleatoric & Operational & Long-Term & Global, System & External & Global, System & High & Adaptability, Safety & Cascading & Ambiguous & Trust \\ \hline          
+        
+        \textbf{Network Issues} & Dynamic, Stochastic & Epistemic & Operational & Short-Term & Global, System & External & Global, System & High & Performance, Safety & Cascading & Incomplete & Transparency \\ \hline          
+        
+        \textbf{Hardware/ Mechanical Failure} & Static, Deterministic & Aleatoric & Operational & Long-Term & Local, Component & Internal & Local, Component & High & Reliability, Safety & Cascading & Incomplete & Transparency \\ \hline          
+        
+        \textbf{Frequent Software Updates} & Dynamic, Stochastic & Epistemic & Development & Long-Term & Global, System & Internal & Global, System & Moderate & Adaptability, Performance & Cascading & Ambiguous & Trust \\ \hline         
+        
+        \textbf{Machine Learning Components} & Dynamic, Stochastic & Epistemic & Design & Long-Term & Global, System & Internal & Global, System & High & Adaptability, Reliability & Cascading & Ambiguous & Bias \\ \hline     
+        
+        \textbf{System Integration} & Static, Deterministic & Epistemic & Testing & Long-Term & Global, System & Internal & Global, System & High & Adaptability, Safety & Cascading & Incomplete & Transparency \\ \hline          
+        
+        \textbf{Mathematical Models/Parameter Inaccuracies} & Static, Deterministic & Epistemic & Design & Long-Term & Local, Component & Internal & Local, Component & Moderate & Adaptability, Performance & Isolated & Precise & Trust \\ \hline          
+        
+        \textbf{Localization Issues} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & External & Local, Component & Moderate & Performance, Safety & Cascading & Noisy & Fairness \\ \hline  
+
+    \end{tabular}%
+    }
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Impacts}
+    \label{tab:taxonomy_impacts}
+    \renewcommand{\arraystretch}{1.3} 
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|>{\columncolor{lightblue}}p{2.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2cm}|}
+        \hline
+        
+        \textbf{Impact} & \textbf{Nature} & \textbf{Type} & \textbf{Stage} & \textbf{Temporal} & \textbf{Occurrence} & \textbf{SourceAdaptation} & \textbf{Scope} & \textbf{Risk} & \textbf{Affect} & \textbf{Propagation} & \textbf{Data} & \textbf{Ethical} \\ \hline
+        
+        \textbf{Safety Risk} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Global, System & External & Global, System & High & Safety & Cascading & Noisy & Trust \\ \hline
+        
+        \textbf{Prediction Accuracy Suffers} & Dynamic, Stochastic & Epistemic & Testing & Long-Term & Global, System & Internal & Global, System & High & Performance, Reliability & Cascading & Ambiguous & Transparency \\ \hline
+        
+        \textbf{Adds Complexity} & Dynamic, Stochastic & Epistemic & Design & Long-Term & Local, Component & Internal & Local, Component & Moderate & Performance & Isolated & Incomplete & Fairness \\ \hline        
+        
+        \textbf{Unpredictable Behavior/Wrong Actions or Movements} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Global, System & External & Global, System & High & Safety, Reliability & Cascading & Noisy & Trust \\ \hline
+        
+        \textbf{Limit the Scope of Verification Activities} & Static, Deterministic & Epistemic & Testing & Long-Term & Global, System & Internal & Global, System & Moderate & Reliability & Isolated & Precise & Transparency \\ \hline
+        
+        \textbf{Increase Cost and Development Time} & Static, Deterministic & Epistemic & Development & Long-Term & Global, System & Internal & Global, System & Moderate & Performance & Isolated & Ambiguous & Fairness \\ \hline 
+        
+        \textbf{Reduced Performance} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & External & Local, Component & Moderate & Performance & Cascading & Noisy & Trust \\ \hline 
+        
+        \textbf{Need for Human Intervention and Reduced Autonomy} & Dynamic, Stochastic & Epistemic & Operational & Long-Term & Global, System & Internal & Global, System & High & Reliability, Adaptability & Cascading & Incomplete & Transparency \\ \hline 
+        
+        \textbf{Necessity for Frequent ML Model Training} & Dynamic, Stochastic & Epistemic & Development & Long-Term & Global, System & Internal & Global, System & High & Reliability, Adaptability & Cascading & Ambiguous & Bias \\ \hline 
+        
+        \textbf{Compromise Reliability} & Dynamic, Stochastic & Epistemic & Operational & Short-Term & Global, System & Internal & Global, System & High & Reliability, Safety & Cascading & Noisy & Fairness \\ \hline 
+        
+        \textbf{Affects Usability} & Static, Deterministic & Epistemic & Design & Long-Term & Local, Component & Internal & Local, Component & Moderate & Usability & Isolated & Precise & Transparency \\ \hline
+        
+    \end{tabular}%
+    }
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Mitigation}
+    \label{tab:taxonomy_mitigation}
+    \renewcommand{\arraystretch}{1.3} 
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|>{\columncolor{lightblue}}p{2.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2cm}|}
+        \hline
+        
+        \textbf{Mitigation} & \textbf{Nature} & \textbf{Type} & \textbf{Stage} & \textbf{Temporal} & \textbf{Occurrence} & \textbf{SourceAdaptation} & \textbf{Scope} & \textbf{Risk} & \textbf{Affect} & \textbf{Propagation} & \textbf{Data} & \textbf{Ethical} \\ \hline
+        
+        \textbf{Risk Assessment} & Static, Deterministic & Epistemic & Design & Long-Term & Global, System & Internal & Global, System & High & Safety, Reliability & Cascading & Precise & Transparency \\ \hline
+        
+        \textbf{Failure Identification/ Localization} & Dynamic, Stochastic & Epistemic & Operational & Short-Term & Local, Component & Internal & Local, Component & High & Safety, Performance & Cascading & Noisy & Trust \\ \hline
+        
+        \textbf{Use Additional Data Sources} & Dynamic, Stochastic & Epistemic & Development & Short-Term & Local, Component & External & Local, Component & Moderate & Reliability, Performance & Isolated & Ambiguous & Fairness \\ \hline
+        
+        \textbf{Probabilistic Modeling of Errors/Failures} & Dynamic, Stochastic & Aleatoric & Design & Long-Term & Global, System & Internal & Global, System & High & Safety, Reliability & Cascading & Noisy & Transparency \\ \hline
+        
+        \textbf{Testing and Validation} & Static, Deterministic & Epistemic & Testing & Long-Term & Global, System & Internal & Global, System & Moderate & Reliability, Performance & Cascading & Precise & Trust \\ \hline
+        
+        \textbf{Simulation/ Digital Twins} & Dynamic, Stochastic & Epistemic & Design & Long-Term & Global, System & Internal & Global, System & Moderate & Performance, Adaptability & Cascading & Incomplete & Bias \\ \hline
+        
+        \textbf{Observers for Control/ Continuous Monitoring} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & External & Local, Component & High & Safety, Adaptability & Cascading & Noisy & Transparency \\ \hline
+        
+        \textbf{Behavior Comparison} & Static, Deterministic & Epistemic & Testing & Short-Term & Local, Component & Internal & Local, Component & Moderate & Reliability & Isolated & Precise & Fairness \\ \hline
+        
+        \textbf{Theorem Proving/Formal Verification} & Static, Deterministic & Epistemic & Design & Long-Term & Global, System & Internal & Global, System & High & Safety, Reliability & Cascading & Precise & Transparency \\ \hline
+        
+        \textbf{Hardware Upgrade} & Static, Deterministic & Aleatoric & Development & Long-Term & Local, Component & External & Local, Component & High & Performance, Reliability & Cascading & Noisy & Fairness \\ \hline
+        
+        \textbf{Machine Learning/ Data-Driven Methods} & Dynamic, Stochastic & Epistemic & Development & Long-Term & Global, System & Internal & Global, System & High & Adaptability, Performance & Cascading & Ambiguous & Trust \\ \hline
+        
+        \textbf{Task Isolation for Incremental Testing and Development} & Static, Deterministic & Epistemic & Development & Short-Term & Local, Component & Internal & Local, Component & Moderate & Performance & Isolated & Precise & Transparency \\ \hline
+
+        \textbf{Plausibility Checks (Acceptance Testing)} & Static, Deterministic & Epistemic & Testing & Short-Term & Local, Component & Verified & Local, Component & Moderate & Reliability, Safety & Isolated & Specific & Responsibility \\ \hline
+        
+        \textbf{Sensor Fusion} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & Integrated & Local, Component & Moderate & Reliability, Safety & Medium & Real-time & Fairness \\ \hline
+        
+        \textbf{Adaptive Planners/Safety Systems} & Dynamic, Stochastic & Epistemic & Operational & Long-Term & Global, System & Adaptive & Global, System & High & Safety, Adaptability & High & Dynamic & Accountability \\ \hline
+        
+        \textbf{Uncertainty Quantification} & Static, Deterministic & Epistemic & Design & Long-Term & Global, System & Quantitative & Global, System & High & Reliability, Performance & Medium & Statistical & Transparency \\ \hline
+        
+        \textbf{Human Aware Navigation} & Dynamic, Stochastic & Aleatoric & Operational & Short-Term & Local, Component & Responsive & Local, Component & High & Safety, Reliability & High & Context-aware & Ethics-Driven \\ \hline
+        
+        \textbf{Trustworthiness Verification} & Static, Deterministic & Epistemic & Testing & Long-Term & Global, System & Verified & Global, System & High & Safety, Reliability & Low & Comprehensive & Trust \\ \hline
+        
+        \textbf{Compliance with Safety Standard} & Static, Deterministic & Epistemic & Design & Long-Term & Global, System & Standardized & Global, System & Moderate & Safety, Reliability & Low & Specific & Regulation-Oriented \\ \hline
+        
+        \textbf{Software/ Algorithms Upgrade} & Static, Deterministic & Epistemic & Development & Long-Term & Local, Component & Upgradable & Local, Component & High & Performance, Reliability & Medium & Modular & Adaptability \\ \hline
+    \end{tabular}%
+    }
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Uncertainty Cases}
+    \label{tab:taxonomy_uncertainties}
+    \renewcommand{\arraystretch}{1}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|>{\columncolor{lightblue}}p{2.3cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+        \hline
+        \textbf{Uncertainty} & \textbf{Nature} & \textbf{Type} & \textbf{Stage} & \textbf{Temporal} & \textbf{Occurrence} & \textbf{SourceAdaptation} & \textbf{Scope} & \textbf{Risk} & \textbf{Affect} & \textbf{Propagation} & \textbf{Data} & \textbf{Ethical} \\ \hline
+        \textbf{Sensor Occlusion, Camera and LIDAR errors due to ambient or harsh light conditions} & Aleatoric & Operational & Dynamic, Stochastic & Short-Term & Local, Component & Limited & High & Reliability, Safety & Medium & Real-time & Verified & Privacy-Sensitive \\ \hline
+        \textbf{Less Experienced Human Interaction} & Aleatoric & Operational & Dynamic, Stochastic & Short-Term & Local, Component & Adaptive & Moderate & Safety, Reliability & Low & Context-aware & Reviewed & User-Centric \\ \hline
+        \textbf{Object Miss Detection/ Localization} & Aleatoric & Testing & Dynamic, Stochastic & Short-Term & Local, Component & Specific & Moderate & Reliability, Performance & Medium & Statistical & Verified & Responsibility-Driven \\ \hline
+        \textbf{Unexpected Navigation Behavior} & Epistemic & Operational & Dynamic, Stochastic & Short-Term & Global, System & Adaptive & High & Safety, Adaptability & High & Dynamic & Compliant & Accountability-Driven \\ \hline
+        \textbf{Extreme Environmental Conditions (e.g., slippery path, sea states, wind)} & Aleatoric & Operational & Dynamic, Stochastic & Long-Term & Global, System & Predictive & High & Adaptability, Safety & High & Context-aware & Verified & Safety-Priority \\ \hline
+        \textbf{Inaccuracies in Interactions with Objects} & Aleatoric & Testing & Static, Deterministic & Short-Term & Local, Component & Limited & Moderate & Reliability, Performance & Low & Specific & Reviewed & Responsibility-Driven \\ \hline
+        \textbf{Deviation from the Goal (E.g., move to undesired place)} & Epistemic & Operational & Dynamic, Stochastic & Short-Term & Global, System & Adaptive & High & Performance, Safety & High & Dynamic & Compliant & Safety-Priority \\ \hline
+        \textbf{Interface Complexity} & Epistemic & Design & Static, Deterministic & Long-Term & Local, Component & Standardized & Moderate & Usability & Low & Modular & Reviewed & User-Centric \\ \hline
+        \textbf{Incorrect Parameters Usage/ Misconfigurations} & Epistemic & Development & Static, Deterministic & Long-Term & Local, Component & Verified & High & Reliability, Performance & Low & Modular & Compliant & Responsibility-Driven \\ \hline
+        \textbf{Low Data Quality, Accuracy, and Precision} & Epistemic & Development & Static, Deterministic & Long-Term & Local, Component & Verified & High & Reliability, Safety & Medium & Statistical & Reviewed & Data Integrity \\ \hline
+        \textbf{Localization Drift/Errors} & Aleatoric & Operational & Dynamic, Stochastic & Short-Term & Local, Component & Limited & Moderate & Performance, Safety & Medium & Real-time & Verified & Safety-Priority \\ \hline
+        \textbf{Unexpected Human Behavior} & Aleatoric & Operational & Dynamic, Stochastic & Short-Term & Local, Component & Adaptive & High & Safety, Reliability & High & Context-aware & Reviewed & User-Centric \\ \hline
+        \textbf{Self-collision} & Aleatoric & Testing & Dynamic, Stochastic & Short-Term & Local, Component & Limited & Moderate & Safety & Low & Specific & Verified & Safety-Priority \\ \hline
+        \textbf{Unexpected Sensor Malfunctions} & Aleatoric & Operational & Dynamic, Stochastic & Short-Term & Local, Component & Predictive & High & Reliability, Safety & Medium & Real-time & Verified & Reliability-Focused \\ \hline
+        \textbf{Transfer Learning Challenges} & Epistemic & Development & Static, Deterministic & Long-Term & Global, System & Adaptive & High & Adaptability, Performance & High & Statistical & Reviewed & Fairness-Oriented \\ \hline
+        \textbf{Component Misalignment/ Variability} & Aleatoric & Development & Static, Deterministic & Short-Term & Local, Component & Limited & Moderate & Reliability, Performance & Medium & Modular & Verified & Responsibility-Driven \\ \hline
+    \end{tabular}%
+    }
+\end{table}
+
+\end{document}
