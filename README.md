@@ -1,6 +1,6 @@
 # RoboULM
 
-RoboULM is a web-based tool for uncertainty analysis in self-adaptive robotic systems using large language models (LLMs). It provides an interactive interface for practitioners to analyze uncertainty at design time based on robotic system requirements and to iteratively refine LLM-generated responses. RoboULM supports three refinement options: *ranking-based refinement*, *example-driven refinement*, and *taxonomy-guided refinement*. The uncertainty taxonomy (*UncerTax*) used by RoboULM is publicly available at [github.com/Simula-COMPLEX/uncertax](https://github.com/Simula-COMPLEX/uncertax), in both PDF format and as an interactive webpage. 
+RoboULM is a web-based tool for uncertainty analysis in self-adaptive robotic systems using large language models (LLMs). It provides an interactive interface for practitioners to analyze uncertainty at design time based on robotic system requirements and to iteratively refine LLM-generated responses. RoboULM supports three refinement options: *ranking-based refinement*, *example-driven refinement*, and *taxonomy-guided refinement*. 
 
 ## Requirements
 
