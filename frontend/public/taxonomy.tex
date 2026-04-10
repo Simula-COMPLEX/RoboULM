@@ -6,7 +6,6 @@
 \usepackage{caption} 
 \usepackage{geometry} 
 \geometry{margin=1in}
-
 \usepackage[table,xcdraw]{xcolor} % For background colors
 \usepackage{colortbl} % For row and column coloring
 \definecolor{lightblue}{rgb}{0.92, 0.97, 1} % Lighter blue color
@@ -32,12 +31,21 @@
         \textbf{Operations/ field testing} & Dynamic, Stochastic & Aleatoric & Operational & Short-term & Environmental, Software & External & Global, System & High & Safety, Reliability & Cascading & Noisy & Fairness \\ \hline  
         
         \textbf{Analyzing deviations from expected behavior} & Dynamic, Stochastic & Epistemic & Testing & Long-term & Software & Internal & Global, System & High & Adaptability, Performance & Cascading & Incomplete & Trust \\ \hline  
+
+        \textbf{Formal modeling with nondeterminism} &
+        Dynamic, Stochastic & Epistemic & Design & Long-term &
+        Software, Environmental & Internal & Global, System & High &
+        Performance, Adaptability & Isolated & Precise & Transparency \\ \hline
         
-        \textbf{Formal modeling with nondeterminism} & Static, Deterministic & Epistemic & Design & Long-term & Software, Environmental & Internal & Global, System & High & Performance, Adaptability & Isolated & Precise & Transparency \\ \hline  
+        \textbf{Intuition} &
+        Dynamic, Stochastic & Epistemic & Design & Short-term &
+        Human & Internal & Local, Component & Moderate &
+        Safety, Reliability & Isolated & Ambiguous & Bias \\ \hline
         
-        \textbf{Intuition} & Dynamic, Stochastic & Other & Design & Short-term & Environmental & Internal & Local, Component & Moderate & Safety, Reliability & Isolated & Ambiguous & Bias \\ \hline  
-        
-        \textbf{Proof of concept demonstration} & Static, Deterministic & Aleatoric & Testing & Short-term & Hardware, Environmental & External & Local, Component & Low & Performance, Safety & Isolated & Precise & Fairness \\ \hline  
+        \textbf{Proof of concept demonstration} &
+        Static, Deterministic & Epistemic & Testing & Short-term &
+        Hardware, Environmental & Internal & Local, Component & Low &
+        Performance, Safety & Isolated & Precise & Fairness \\ \hline
         
         \textbf{Component variations} & Static, Deterministic & Aleatoric & Operational & Short-term & Hardware & External & Local, Component & Moderate & Reliability, Safety & Cascading & Noisy & Transparency \\ \hline  
         

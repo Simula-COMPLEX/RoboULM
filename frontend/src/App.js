@@ -36,200 +36,227 @@ function App() {
   const highlightUserPrompt = (text) => {
     return text.replace(/\b([A-Z_]{3,})(?=\b|:)/g, '<span class="keyword-prompt">$1</span>');
   };
-const [chatSessions, setChatSessions] = useState(() => {
-  const saved = localStorage.getItem("chatSessions");
-  return saved ? JSON.parse(saved) : [[]];
-});
-const [currentSession, setCurrentSession] = useState(0);
-const [loading, setLoading] = useState(false);
-const bottomRef = useRef(null);
+  // === Chat Sessions ===
+  // Stores all chat sessions.
+  // Persisted in localStorage to survive page reloads.
+  const [chatSessions, setChatSessions] = useState(() => {
+    const saved = localStorage.getItem("chatSessions");
+    return saved ? JSON.parse(saved) : [[]];
+  });
+  const [currentSession, setCurrentSession] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const bottomRef = useRef(null);
 
-const [renameIndex, setRenameIndex] = useState(null);
-const [renameValue, setRenameValue] = useState("");
-
-
-const [inputHeight, setInputHeight] = useState(120);
-const isResizingRef = useRef(false);
-
-const [showPromptPopup, setShowPromptPopup] = useState(false);
-const [showAnalysisPopup, setShowAnalysisPopup] = useState(false); 
-
-const [uploadedFiles, setUploadedFiles] = useState([]);
-const [dragActive, setDragActive] = useState(false);
-
-const [showPromptCollapsed, setShowPromptCollapsed] = useState(false);
-
-const [workflowStep, setWorkflowStep] = useState("");
-const [workflowProgress, setWorkflowProgress] = useState("INIT");
-
-const [popupRole, setPopupRole] = useState("");
-const [popupObjective, setPopupObjective] = useState("");
-const [popupInstructions, setPopupInstructions] = useState("");
-const [popupRestrictions, setPopupRestrictions] = useState("");
-const [popupAttachmentFiles, setPopupAttachmentFiles] = useState([]);
-
-const [taxonomySelection, setTaxonomySelection] = useState("");
-const [taxonomyData, setTaxonomyData] = useState({});
-const [selectedTableRows, setSelectedTableRows] = useState({ header: [], rows: [] });
-
-const [selectedRowIndices, setSelectedRowIndices] = useState([]);
-
-const [showObjectiveExamples, setShowObjectiveExamples] = useState(true);
-const [showInstructionExamples, setShowInstructionExamples] = useState(true);
-const [showRestrictionExamples, setShowRestrictionExamples] = useState(true);
-const [refineMode, setRefineMode] = useState("ranking");
-
-const [userSetupDone, setUserSetupDone] = useState(() => localStorage.getItem("userSetupDone") === "true");
-const [userName, setUserName] = useState(() => localStorage.getItem("userName") || "");
-const [useCaseName, setUseCaseName] = useState(() => localStorage.getItem("useCaseName") || "");
-const [showUserEdit, setShowUserEdit] = useState(false);
-const [editUserErrors, setEditUserErrors] = useState({});
-
-const [showConsent, setShowConsent] = useState(true);
-
-const [consentGiven, setConsentGiven] = React.useState(false);
-
-useEffect(() => {
-  const savedConsent = localStorage.getItem("consentGiven");
-  if (savedConsent === "true") {
-    setConsentGiven(true);
-  }
-}, []);
+  // For rename modal
+  const [renameIndex, setRenameIndex] = useState(null);
+  const [renameValue, setRenameValue] = useState("");
 
 
-const generateRandomUserName = () => {
-  const randomNum = Math.floor(Math.random() * 9000 + 1000);
-  return `User${randomNum}`;
-};
+  const [inputHeight, setInputHeight] = useState(120);
+  const isResizingRef = useRef(false);
 
-const [popupErrors, setPopupErrors] = useState({
-  objective: false,
-  attachments: false,
-  instructions: false,
-  restrictions: false
-});
+  const [showPromptPopup, setShowPromptPopup] = useState(false);
+  const [showAnalysisPopup, setShowAnalysisPopup] = useState(false); 
 
-const questionRef = useRef();
-const examplesRef = useRef();
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [dragActive, setDragActive] = useState(false);
 
-const EXAMPLE_OBJECTIVES = [
-  "The aim is to analyze uncertainty in robotics systems to improve adaptability and reliability."
-];
+  const [showPromptCollapsed, setShowPromptCollapsed] = useState(false);
+  
+  // Tracks the current step shown in the workflow visualization
+  const [workflowStep, setWorkflowStep] = useState("");
+  // === Workflow Gating State ===
+  // Controls which buttons/actions are enabled
+  // INIT        → only Prompt Setup enabled
+  // SETUP_DONE  → Send Prompt enabled
+  // PROMPT_SENT → Send Correction enabled
+  // REFINED     → all actions enabled
+  const [workflowProgress, setWorkflowProgress] = useState("INIT");
 
-const EXAMPLE_INSTRUCTIONS = [
-  "Step 1: Carefully read and comprehend the whole document attached, including figures and tables.",
-  "Step 2: Use your knowledge of similar robotics and build a thorough understanding of the robotic system described in the document."
-];
+  // === Prompt Setup Popup State ===
+  // Controlled values edited inside the Prompt Setup modal
+  const [popupRole, setPopupRole] = useState("");
+  const [popupObjective, setPopupObjective] = useState("");
+  const [popupInstructions, setPopupInstructions] = useState("");
+  const [popupRestrictions, setPopupRestrictions] = useState("");
+  const [popupAttachmentFiles, setPopupAttachmentFiles] = useState([]);
 
-const EXAMPLE_RESTRICTIONS = [
-  "Make sure to stick to the robotic system described in the document.",
-  "Do not confuse robotic faults/errors/failures with uncertainties.",
-  "Avoid hallucinating system capabilities."
-];
+  // === Taxonomy Refinement State ===
+  // Holds parsed taxonomy tables and user-selected rows
+  const [taxonomySelection, setTaxonomySelection] = useState("");
+  const [taxonomyData, setTaxonomyData] = useState({});
+  const [selectedTableRows, setSelectedTableRows] = useState({ header: [], rows: [] });
 
-const [formErrors, setFormErrors] = useState({
-  objective: false,
-  question: false,
-  attachments: false,
-  instructions: false
-});
+  const [selectedRowIndices, setSelectedRowIndices] = useState([]);
 
-const getFileIcon = (fileName) => {
-  const ext = fileName.split('.').pop().toLowerCase();
+  // === Example Suggestions ===
+  // Displayed as selectable chips when corresponding textarea is empty
+  const [showObjectiveExamples, setShowObjectiveExamples] = useState(true);
+  const [showInstructionExamples, setShowInstructionExamples] = useState(true);
+  const [showRestrictionExamples, setShowRestrictionExamples] = useState(true);
+  const [refineMode, setRefineMode] = useState("ranking");
 
-  if (["png","jpg","jpeg","gif","svg"].includes(ext)) return "🖼️";
-  if (["pdf"].includes(ext)) return "📄";
-  if (["doc","docx"].includes(ext)) return "📝";
-  if (["xls","xlsx"].includes(ext)) return "📊";
-  if (["txt","md","rtf"].includes(ext)) return "📘";
-  if (["zip","rar","7z"].includes(ext)) return "🗜️";
-  return "📁";
-};
+  const [userSetupDone, setUserSetupDone] = useState(() => localStorage.getItem("userSetupDone") === "true");
+  const [userName, setUserName] = useState(() => localStorage.getItem("userName") || "");
+  const [useCaseName, setUseCaseName] = useState(() => localStorage.getItem("useCaseName") || "");
+  const [showUserEdit, setShowUserEdit] = useState(false);
+  const [editUserErrors, setEditUserErrors] = useState({});
 
-const handleFileSelect = (e) => {
-  const files = Array.from(e.target.files);
-  setUploadedFiles(prev => [...prev, ...files]);  
-  setPopupAttachmentFiles(prev => [...prev, ...files]);  
-};
+  const [showConsent, setShowConsent] = useState(true);
 
-const removeFile = (index) => {
-  setUploadedFiles(prev => prev.filter((_, i) => i !== index));
-  setPopupAttachmentFiles(prev => prev.filter((_, i) => i !== index));
-};
+  const [consentGiven, setConsentGiven] = React.useState(false);
 
-const handleDragOver = (e) => {
-  e.preventDefault();
-  setDragActive(true);
-};
+  useEffect(() => {
+    const savedConsent = localStorage.getItem("consentGiven");
+    if (savedConsent === "true") {
+      setConsentGiven(true);
+    }
+  }, []);
 
-const handleDragLeave = () => {
-  setDragActive(false);
-};
 
-const handleDrop = (e) => {
-  e.preventDefault();
-  setDragActive(false);
-
-  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-    const newFiles = Array.from(e.dataTransfer.files);
-    setUploadedFiles(prev => [...prev, ...newFiles]);
-  }
-};
-
-const validateRequiredFields = () => {
-  const errors = {
-    objective: !popupObjective.trim(),
-    question: !questionRef.current?.value?.trim(),
-    attachments: uploadedFiles.length === 0,
-    instructions: !popupInstructions.trim()
+  const generateRandomUserName = () => {
+    const randomNum = Math.floor(Math.random() * 9000 + 1000);
+    return `User${randomNum}`;
   };
 
-  setFormErrors(errors);
-
-  return !Object.values(errors).some(Boolean);
-};
-
-useEffect(() => {
-  const sliders = document.querySelectorAll(".ranking-slider");
-
-  sliders.forEach((slider) => {
-    slider.addEventListener("input", (e) => {
-      e.target.nextSibling.textContent = e.target.value;
-    });
+  // Popup field error state
+  const [popupErrors, setPopupErrors] = useState({
+    objective: false,
+    attachments: false,
+    instructions: false,
+    restrictions: false
   });
 
-  return () => {
+  // Prompt Construction field refs
+  const questionRef = useRef();
+  const examplesRef = useRef();
+
+  // Example suggestion text for popup editor
+  const EXAMPLE_OBJECTIVES = [
+    "The aim is to analyze uncertainty in robotics systems to improve adaptability and reliability."
+  ];
+
+  const EXAMPLE_INSTRUCTIONS = [
+    "Step 1: Carefully read and comprehend the whole document attached, including figures and tables.",
+    "Step 2: Use your knowledge of similar robotics and build a thorough understanding of the robotic system described in the document."
+  ];
+
+  const EXAMPLE_RESTRICTIONS = [
+    "Make sure to stick to the robotic system described in the document.",
+    "Do not confuse robotic faults/errors/failures with uncertainties.",
+    "Avoid hallucinating system capabilities."
+  ];
+
+  // Required fields validation state and helper
+  const [formErrors, setFormErrors] = useState({
+    objective: false,
+    question: false,
+    attachments: false,
+    instructions: false
+  });
+
+  const getFileIcon = (fileName) => {
+    const ext = fileName.split('.').pop().toLowerCase();
+
+    if (["png","jpg","jpeg","gif","svg"].includes(ext)) return "🖼️";
+    if (["pdf"].includes(ext)) return "📄";
+    if (["doc","docx"].includes(ext)) return "📝";
+    if (["xls","xlsx"].includes(ext)) return "📊";
+    if (["txt","md","rtf"].includes(ext)) return "📘";
+    if (["zip","rar","7z"].includes(ext)) return "🗜️";
+    return "📁";
+  };
+  
+  // Handles file selection via file input
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    setUploadedFiles(prev => [...prev, ...files]);  
+    setPopupAttachmentFiles(prev => [...prev, ...files]);  
+  };
+
+  const removeFile = (index) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    setPopupAttachmentFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragActive(false);
+  };
+
+  // Handles file selection via file input
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const newFiles = Array.from(e.dataTransfer.files);
+      setUploadedFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  // Validates mandatory fields before allowing prompt submission
+  const validateRequiredFields = () => {
+    const errors = {
+      objective: !popupObjective.trim(),
+      question: !questionRef.current?.value?.trim(),
+      attachments: uploadedFiles.length === 0,
+      instructions: !popupInstructions.trim()
+    };
+
+    setFormErrors(errors);
+
+    return !Object.values(errors).some(Boolean);
+  };
+
+  // Keeps ranking slider labels in sync with slider values
+  useEffect(() => {
+    const sliders = document.querySelectorAll(".ranking-slider");
+
     sliders.forEach((slider) => {
-      slider.removeEventListener("input", () => {});
+      slider.addEventListener("input", (e) => {
+        // numeric label next to slider
+        e.target.nextSibling.textContent = e.target.value;
+      });
     });
-  };
-}, [refineMode]);
 
-useEffect(() => {
-  const handleMouseMove = (e) => {
-    if (!isResizingRef.current) return;
-    const newHeight = Math.min(Math.max(window.innerHeight - e.clientY, 80), 500);
-    setInputHeight(newHeight);
-  };
+    return () => {
+      sliders.forEach((slider) => {
+        slider.removeEventListener("input", () => {});
+      });
+    };
+  }, [refineMode]);
 
-  const handleMouseUp = () => {
-    isResizingRef.current = false;
-  };
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isResizingRef.current) return;
+      const newHeight = Math.min(Math.max(window.innerHeight - e.clientY, 80), 500);
+      setInputHeight(newHeight);
+    };
 
-  window.addEventListener("mousemove", handleMouseMove);
-  window.addEventListener("mouseup", handleMouseUp);
-  return () => {
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
-  };
-}, []);
+    const handleMouseUp = () => {
+      isResizingRef.current = false;
+    };
 
-const messages = Array.isArray(chatSessions[currentSession]) ? chatSessions[currentSession] : [];
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
 
-useEffect(() => {
-  localStorage.setItem("chatSessions", JSON.stringify(chatSessions));
-  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-}, [chatSessions]);
+  // const messages = chatSessions[currentSession] || [];
+  const messages = Array.isArray(chatSessions[currentSession]) ? chatSessions[currentSession] : [];
+
+  useEffect(() => {
+    localStorage.setItem("chatSessions", JSON.stringify(chatSessions));
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatSessions]);
   
   useEffect(() => {
     try {
@@ -656,6 +683,21 @@ ${RESPONSE_FORMAT}
     "ETHICALIMPLICATIONS"
   ];
 
+  const RANKING_DIMENSION_HELP = {
+    "Uncertainty": "The main uncertainty being identified in the robotic system.",
+    "Nature": "How uncertainty behaves: deterministic/dtochastic, static/dynamic.",
+    "Temporal Characteristics": "How the uncertainty changes over time, such as static, dynamic, or short-term or long-term.",
+    "Affect": "What quality aspect (performance, safety, adaptability, or reliability) is impacted by this uncertainty?",
+    "Occurrence": "Under what conditions (environmental, task, or interaction) this uncertainty is likely to appear.",
+    "Source of Adaptation": "Which adaptive mechanism, trigger, or system source is related to this uncertainty.",
+    "Scope": "Whether the uncertainty is local to one component or broader across the system.",
+    "Propagation": "How the uncertainty may spread or impact other parts of the system, isolated (stays local) or cascading (affects other components).",
+    "Resolution": "How the uncertainty can be handled, reduced, mitigated, or resolved.",
+    "Severity": "How risky (low/high risk) this uncertainty is for system performance or safety.",
+    "Data Characteristics": "The quality, completeness, reliability, or variability of related data.",
+    "Ethical Implications": "Any considerations for trust, transparency, bias, and fairness, or ethical concerns involved."
+  };
+
   // Extracts structured uncertainty dimensions from an LLM response
   // Used for comparison and logging during refinement
   function extractDimensionsFromResponse(text = "") {
@@ -982,11 +1024,18 @@ ${RESPONSE_FORMAT}
           </div>
 
           {/* Feedback button (right) */}
+          {/* <button
+            className="feedback-btn"
+            title="Send Feedback"
+            onClick={() => window.open("https://forms.gle/Q8itR41mnVvSY4nd6", "_blank")}
+          >
+            💬 <span className="feedback-text">Feedback</span>
+          </button> */}
           <button
             className="feedback-btn"
             disabled={workflowProgress !== "REFINED"}
             title="Send Feedback"
-            onClick={() => window.open("", "_blank")}
+            onClick={() => window.open("https://forms.gle/Q8itR41mnVvSY4nd6", "_blank")}
           >
             💬 <span className="feedback-text">Feedback</span>
           </button>
@@ -1200,7 +1249,6 @@ ${RESPONSE_FORMAT}
             <span className="workflow-label">Start</span>
           </div>
 
-          <span className="connector"></span>
           <span className="arrow">→</span>
 
           <button className={`workflow-btn ${workflowStep === "setup" ? "active" : ""}`}
@@ -1220,7 +1268,7 @@ ${RESPONSE_FORMAT}
             <span className="two-way-arrow">↔</span>
 
             <button className={`workflow-btn ${workflowStep === "send" ? "active" : ""}`} onClick={() => setWorkflowStep("send")}>
-              Send Prompt
+              Send Query
             </button>
 
             <span className="two-way-arrow">↔</span>
@@ -1236,7 +1284,6 @@ ${RESPONSE_FORMAT}
             </button>
           </div>
 
-          <span className="connector"></span>
           <span className="arrow">→</span>
 
           <div className="workflow-step">
@@ -1246,21 +1293,10 @@ ${RESPONSE_FORMAT}
 
         </div>
 
-        {/* PROMPT CONSTRUCTION */}
+        {/* CONTEXT UNDERSTANDING */}
         <div className="panel-header">
-          <h2 className="panel-title">Prompting</h2>
+          <h2 className="panel-title">1. Context Understanding</h2>
           <div className="button-row">
-            {/* <button className="popup-btn" onClick={() => {
-              setWorkflowStep("setup");
-              setPopupRole(popupRole || "Analyst");
-              setPopupObjective(popupObjective || "");
-              setPopupInstructions(popupInstructions || "");
-              setPopupRestrictions(popupRestrictions || "");
-              setPopupAttachmentFiles(uploadedFiles || []);
-              setShowPromptPopup(true);
-            }}>
-              ✏️ Prompt Setup
-            </button> */}
             <button
               className="popup-btn"
               disabled={false}   // always enabled
@@ -1276,9 +1312,13 @@ ${RESPONSE_FORMAT}
             >
               ✏️ Prompt Setup
             </button>
-            {/* <button className="popup-btn" onClick={() => { setWorkflowStep("send"); sendPrompt(); }}>
-              🚀 Send Prompt
-            </button> */}
+          </div>
+        </div>
+
+        {/* PROMPT CONSTRUCTION */}
+        <div className="panel-header">
+          <h2 className="panel-title">2. Initial Query</h2>
+          <div className="button-row">
             <button
               className="popup-btn"
               disabled={workflowProgress === "INIT"}
@@ -1287,24 +1327,15 @@ ${RESPONSE_FORMAT}
                 sendPrompt();
               }}
             >
-              🚀 Send Prompt
+              🚀 Send Query
             </button>
           </div>
-
-          {/* Tiny toggle button to shrink or expand. */}
-          {/* <button 
-            className="toggle-btn prompt-toggle"
-            onClick={() => setShowPromptCollapsed(prev => !prev)}
-            aria-label="Collapse Prompt Construction"
-          >
-            {showPromptCollapsed ? "▾" : "▴"}
-          </button> */}
         </div>
 
         <div className={`panel-card prompt-panel-card ${showPromptCollapsed ? "collapsed" : ""}`}>
 
           <div className={`form-row ${formErrors.question ? "error" : ""}`}>
-            <label>Question</label>
+            <label>Uncertainty-related Question</label>
             <textarea
               className="input-textarea"
               ref={questionRef}
@@ -1316,7 +1347,7 @@ ${RESPONSE_FORMAT}
 
         {/* REFINEMENT SECTION */}
         <div className="panel-header">
-          <h2 className="panel-title">Refinement</h2>
+          <h2 className="panel-title">3. Iterative Response Refinement</h2>
           <div className="button-row">
             {/* <button className="popup-btn" onClick={() => {
               setWorkflowStep("refine");
@@ -1332,7 +1363,7 @@ ${RESPONSE_FORMAT}
                 sendRefinementPrompt();
               }}
             >
-              📤 Send Correction
+              📤 Send Refinement
             </button>
           </div>
         </div>
@@ -1448,7 +1479,20 @@ ${RESPONSE_FORMAT}
                 "Ethical Implications"
               ].map((dim) => (
                 <div className="ranking-row" key={dim}>
-                  <label className="ranking-label">{dim}</label>
+                  <label className="ranking-label">
+                    <span>{dim}</span>
+                    <span
+                      className="dimension-help-icon"
+                      tabIndex="0"
+                      role="button"
+                      aria-label={`Help for ${dim}`}
+                    >
+                      ?
+                      <span className="dimension-tooltip">
+                        {RANKING_DIMENSION_HELP[dim]}
+                      </span>
+                    </span>
+                  </label>
 
                   <input 
                     type="range" 
