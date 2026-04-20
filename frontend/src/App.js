@@ -104,7 +104,7 @@ function App() {
 
   const [showConsent, setShowConsent] = useState(true);
 
-  const [consentGiven, setConsentGiven] = React.useState(false);
+  const [consentGiven, setConsentGiven] = React.useState(false); 
 
   useEffect(() => {
     const savedConsent = localStorage.getItem("consentGiven");
@@ -547,7 +547,7 @@ RESTRICTIONS: ${RESTRICTIONS}
     });
 
   const fullPrompt = `
-For each response dimension, domain experts have evaluated their agreements and provided a ranking in range 1 (lowest) to 10 (highest). Considering the ranking scores given below, your task is to reanalyze and regenerate the response. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension. Do not explain ranking scores.
+The previous response to the uncertainty question requires improvement. For each response dimension, domain experts have evaluated their agreements and provided a ranking in range 1 (lowest) to 10 (highest). A lowest rank score indicate level of experts disagreement and the need for totally revised response. A highest rank score means experts high agreement and the response does not need to be revised. A medium rank score means medium confidence and the response need to be revised partially. Considering the ranking scores given below, your task is to reanalyze and regenerate the response. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension. Do not explain ranking scores.
 
 <user__selection>RANKING SCORES</user__selection>
 ${rankingText}
@@ -581,8 +581,10 @@ ${RESPONSE_FORMAT}
       .map((row) => row.join(" | "))
       .join("\n");
 
+
     const fullPrompt = `
-The previous response to the question requires improvement. Use the following taxonomy section as a reference to explore uncovered uncertainties and regenerate the response. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension. Do not explain taxonomy values.
+The previous response to the uncertainty question requires improvement. Revise the response by incorporating additional uncertainties guided by the taxonomy provided below. Use the taxonomy strictly as an internal reference to identify missing or weakly addressed uncertainty dimensions. Do not define, describe, or explain any taxonomy terms or values. Do not restate or explain taxonomy headers or values.
+Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension. Do not include generic definitions.
 
 <user__selection>TAXONOMY SECTION</user__selection>
 <user__selection>HEADER</user__selection> 
@@ -601,7 +603,7 @@ ${RESPONSE_FORMAT}
 
   const buildExamplePrompt = (exampleText) => {
     const fullPrompt = `
-The previous response requires improvement. Use the following expert-provided example to regenerate the response. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension.
+The previous response to the uncertainty question requires improvement. Use the following expert-provided example to regenerate the response. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension.
 
 EXAMPLES
 ${exampleText}
@@ -857,7 +859,7 @@ ${RESPONSE_FORMAT}
     const QUESTION = questionRef.current?.value?.trim() || "";
 
     const constructedPrompt = `
-Your task is to answer the QUESTION while taking OBJECTIVE, INSTRUCTIONS and RESTRICTIONS into consideration. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension.
+Your task is to answer the QUESTION while taking OBJECTIVE, INSTRUCTIONS and RESTRICTIONS into consideration. Provide a structured and concise response in the specified format. Address each dimension explicitly and, where possible, include 1-3 sentences of reasoning for each dimension. Do not include generic definitions. Ensure all content is contextualized to the given robotic requirements. 
     
 QUESTION: ${QUESTION}
 
@@ -1023,19 +1025,12 @@ ${RESPONSE_FORMAT}
             <span className="tool-name-text">RoboULM</span>
           </div>
 
-          {/* Feedback button (right) */}
-          {/* <button
-            className="feedback-btn"
-            title="Send Feedback"
-            onClick={() => window.open("https://forms.gle/Q8itR41mnVvSY4nd6", "_blank")}
-          >
-            💬 <span className="feedback-text">Feedback</span>
-          </button> */}
+          {/* Link for Feedback */}
           <button
             className="feedback-btn"
             disabled={workflowProgress !== "REFINED"}
             title="Send Feedback"
-            onClick={() => window.open("https://forms.gle/Q8itR41mnVvSY4nd6", "_blank")}
+            onClick={() => window.open("", "_blank")}
           >
             💬 <span className="feedback-text">Feedback</span>
           </button>
@@ -1302,7 +1297,7 @@ ${RESPONSE_FORMAT}
               disabled={false}   // always enabled
               onClick={() => {
                 setWorkflowStep("setup");
-                setPopupRole(popupRole || "Analyst");
+                setPopupRole(popupRole || "Assistant");
                 setPopupObjective(popupObjective || "");
                 setPopupInstructions(popupInstructions || "");
                 setPopupRestrictions(popupRestrictions || "");
